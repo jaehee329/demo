@@ -1,4 +1,4 @@
-package com.example.demo.controller.dto;
+package com.example.community.controller.dto;
 
 import static org.assertj.core.api.Assertions.*;
 
