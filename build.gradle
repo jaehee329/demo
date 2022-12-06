@@ -23,6 +23,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     // h2
     implementation 'com.h2database:h2'
+    // webflux, restTemplate 대신 webClient 를 사용하여 테스트하기 위해
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
 }
 
 tasks.named('test') {
