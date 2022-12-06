@@ -10,8 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.web.servlet.MockMvc;
 
-// @SpringBootTest
-@WebMvcTest
+// WebMvcTest: web layer(controller)에 대해서만 테스트할 때 쓴다. 특정 컨트롤러를 지정하지 않으면 모두 불러와 톰캣이 필요한 경우 오류 발생.
+@WebMvcTest(HelloController.class)
 class HelloControllerTest {
 
 	@Autowired
