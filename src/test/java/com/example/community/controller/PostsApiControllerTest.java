@@ -121,4 +121,44 @@ class PostsApiControllerTest {
 		assertThat(all.get(0).getContent()).isEqualTo(content);
 		assertThat(all.get(0).getAuthor()).isEqualTo(author);
 	}
+
+	@Test
+	@DisplayName("포스트 findById 테스트")
+	public void postsFindByIdTest() {
+		// given
+		String title = "title";
+		String content = "content";
+		String author = "jjhs9803@gmail.com";
+		PostsSaveRequestDto requestDto = PostsSaveRequestDto
+			.builder()
+			.title(title)
+			.content(content)
+			.author(author)
+			.build();
+		String baseUrl = "http://localhost:" + port;
+		String followingUrl = "/api/v1/posts";
+
+		// when
+		WebClient webClient = WebClient.builder()
+			.baseUrl(baseUrl)
+			.build();
+
+		ResponseEntity<Long> responseEntity = webClient.post()
+			.uri(followingUrl)
+			.bodyValue(requestDto)
+			.retrieve()
+			.toEntity(Long.class)
+			.block();
+
+		// then
+		assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+		assertThat(responseEntity.getBody()).isGreaterThan(0L);
+
+		List<Posts> all = postsRepository.findAll();
+		assertThat(all.get(0).getTitle()).isEqualTo(title);
+		assertThat(all.get(0).getContent()).isEqualTo(content);
+		assertThat(all.get(0).getAuthor()).isEqualTo(author);
+	}
+
+
 }
