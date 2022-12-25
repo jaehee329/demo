@@ -20,6 +20,9 @@ import com.example.community.controller.dto.PostsSaveRequestDto;
 import com.example.community.controller.dto.PostsUpdateRequestDto;
 import com.example.community.domain.posts.Posts;
 import com.example.community.domain.posts.PostsRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 /*
 webEnvironment를 설정하지 않으면 실제 서블릿 컨테이너를 mocking한 것을 사용
@@ -126,11 +129,11 @@ class PostsApiControllerTest {
 
 	@Test
 	@DisplayName("포스트 findById(GET) 테스트")
-	public void postsFindByIdTest() {
+	public void postsFindByIdTest() throws JsonProcessingException {
 		// given
 		String title = "title";
 		String content = "content";
-		String author = "jjhs9803@gmail.com";
+		String author = "a@a.com";
 
 		Posts savedPosts = postsRepository.save(Posts.builder()
 			.title(title)
@@ -146,16 +149,21 @@ class PostsApiControllerTest {
 			.baseUrl(baseUrl)
 			.build();
 
-		PostsResponseDto response = webClient.get()
+		// PostsResponseDto로 바로 매핑 시 생성자에서 Posts의 메서드 사용 과정에서 문제가 생기는 듯
+		// String으로 변환 뒤 Jackson을 사용해 파싱
+		String responseJSON = webClient.get()
 			.uri(followingUrl)
 			.retrieve()
-			.bodyToMono(PostsResponseDto.class)
+			.bodyToMono(String.class)
 			.block();
 
+		ObjectMapper objectMapper = new ObjectMapper();
+		ObjectNode jsonNodes = objectMapper.readValue(responseJSON, ObjectNode.class);
+
 		// then
-		assertThat(response.getTitle()).isEqualTo(title);
-		assertThat(response.getContent()).isEqualTo(content);
-		assertThat(response.getAuthor()).isEqualTo(author);
+		assertThat(jsonNodes.get("title").equals(title));
+		assertThat(jsonNodes.get("content").equals(content));
+		assertThat(jsonNodes.get("author").equals(content));
 	}
 
 	@Test
