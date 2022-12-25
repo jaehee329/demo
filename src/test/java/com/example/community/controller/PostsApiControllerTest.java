@@ -15,7 +15,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import com.example.community.controller.dto.PostsResponseDto;
 import com.example.community.controller.dto.PostsSaveRequestDto;
+import com.example.community.controller.dto.PostsUpdateRequestDto;
 import com.example.community.domain.posts.Posts;
 import com.example.community.domain.posts.PostsRepository;
 
@@ -50,7 +52,7 @@ class PostsApiControllerTest {
 	}
 
 	@Test
-	@DisplayName("포스트 저장 테스트, restTemplate 사용")
+	@DisplayName("포스트 저장(POST) 테스트, restTemplate 사용")
 	public void postsSaveTest1() {
 		// given
 		String title = "title";
@@ -85,7 +87,7 @@ class PostsApiControllerTest {
 	응답 변환: https://stackoverflow.com/questions/67975574/how-to-convert-webclient-response-to-responseentity
 	 */
 	@Test
-	@DisplayName("포스트 저장 테스트, webClient 사용")
+	@DisplayName("포스트 저장(POST) 테스트, webClient 사용")
 	public void postsSaveTest2() {
 		// given
 		String title = "title";
@@ -123,42 +125,81 @@ class PostsApiControllerTest {
 	}
 
 	@Test
-	@DisplayName("포스트 findById 테스트")
+	@DisplayName("포스트 findById(GET) 테스트")
 	public void postsFindByIdTest() {
 		// given
 		String title = "title";
 		String content = "content";
 		String author = "jjhs9803@gmail.com";
-		PostsSaveRequestDto requestDto = PostsSaveRequestDto
-			.builder()
+
+		Posts savedPosts = postsRepository.save(Posts.builder()
 			.title(title)
 			.content(content)
 			.author(author)
-			.build();
-		String baseUrl = "http://localhost:" + port;
-		String followingUrl = "/api/v1/posts";
+			.build());
 
 		// when
+		String baseUrl = "http://localhost:" + port;
+		String followingUrl = "/api/v1/posts/" + savedPosts.getId();
+
 		WebClient webClient = WebClient.builder()
 			.baseUrl(baseUrl)
 			.build();
 
-		ResponseEntity<Long> responseEntity = webClient.post()
+		PostsResponseDto response = webClient.get()
 			.uri(followingUrl)
-			.bodyValue(requestDto)
 			.retrieve()
-			.toEntity(Long.class)
+			.bodyToMono(PostsResponseDto.class)
 			.block();
 
 		// then
-		assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
-		assertThat(responseEntity.getBody()).isGreaterThan(0L);
-
-		List<Posts> all = postsRepository.findAll();
-		assertThat(all.get(0).getTitle()).isEqualTo(title);
-		assertThat(all.get(0).getContent()).isEqualTo(content);
-		assertThat(all.get(0).getAuthor()).isEqualTo(author);
+		assertThat(response.getTitle()).isEqualTo(title);
+		assertThat(response.getContent()).isEqualTo(content);
+		assertThat(response.getAuthor()).isEqualTo(author);
 	}
 
+	@Test
+	@DisplayName("포스트 update(PUT) 테스트")
+	public void postsUpdateTest() {
+		// given
+		String title = "title";
+		String content = "content";
+		String author = "a@a.com";
+		Posts original = postsRepository.save(Posts.builder()
+			.title(title)
+			.content(content)
+			.author(author)
+			.build());
 
+		// when
+		String title2 = "title2";
+		String content2 = "content2";
+		String author2 = "b@b.com";
+		PostsUpdateRequestDto requestDto = PostsUpdateRequestDto.builder()
+			.title(title2)
+			.content(content2)
+			.author(author2)
+			.build();
+
+		String baseUrl = "http://localhost:" + port;
+		String followingUrl = "/api/v1/posts/" + original.getId();
+		WebClient webClient = WebClient.builder()
+			.baseUrl(baseUrl)
+			.build();
+
+		Long updateId = webClient.put()
+			.uri(followingUrl)
+			.bodyValue(requestDto)
+			.retrieve()
+			.bodyToMono(Long.class)
+			.block();
+
+		// then
+		assertThat(updateId).isEqualTo(original.getId());
+
+		List<Posts> all = postsRepository.findAll();
+		assertThat(all.get(0).getTitle()).isEqualTo(title2);
+		assertThat(all.get(0).getContent()).isEqualTo(content2);
+		assertThat(all.get(0).getAuthor()).isEqualTo(author2);
+	}
 }

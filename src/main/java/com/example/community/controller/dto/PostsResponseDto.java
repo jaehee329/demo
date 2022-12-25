@@ -2,6 +2,9 @@ package com.example.community.controller.dto;
 
 import com.example.community.domain.posts.Posts;
 
+import lombok.Getter;
+
+@Getter
 public class PostsResponseDto {
 
 	private Long id;
