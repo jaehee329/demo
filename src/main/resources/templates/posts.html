@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+
+<th:block layout:fragment="content">
+
+    <br>
+    <h1>Posts</h1>
+    <br>
+
+    <div class="container">
+        <table class="table table-striped table-hover text-center">
+            <thead>
+                <tr>
+                    <th>게시글 번호</th>
+                    <th>제목</th>
+                    <th>작성자</th>
+                    <th>최종 수정일</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <th>title</th>
+                    <th>author</th>
+                    <th>modificationDate</th>
+                </tr>
+            </tbody>
+        </table>
+
+        <hr>
+        <div>
+            <ul class="pagination justify-content-center">
+                <li><a href="#" style="margin-right: 5px;" class="text-secondary"︎> ◀ </a></li>
+                <li><a href="#" style="margin-right: 5px;" class="text-secondary"︎> 1 </a></li>
+                <li><a href="#" style="margin-right: 5px;" class="text-secondary"︎> 2 </a></li>
+                <li><a href="#" style="margin-right: 5px;" class="text-secondary"︎> ▶︎ </a></li>
+            </ul>
+        </div>
+        <a href="/posts/save" class="btn btn-outline-info float-right">글쓰기</a>
+
+    </div>
+
+
+</th:block>
+</html>
