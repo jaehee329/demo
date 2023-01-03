@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+
+<th:block layout:fragment="content">
+
+  <br>
+  <h1>Posts Save</h1>
+  <br>
+
+  <div class="container">
+
+    <form th:action="@{/api/v1/posts}" th:object="${postForm}" method="post">
+      <div class="form-group">
+        <lable th:for="title">제목</lable>
+        <input type="text" th:field="*{title}" class="form-control" placeholder="제목을 입력하세요">
+      </div>
+      <br>
+      <div class="form-group">
+        <lable th:for="author">작성자</lable>
+        <input type="text" th:field="*{author}" class="form-control"
+               id="author" placeholder="작성자를 입력하세요">
+      </div>
+      <br>
+      <div class="form-group">
+        <lable for="title">내용</lable>
+        <input type="text" class="form-control"
+               id="content" placeholder="내용을 입력하세요">
+      </div>
+      <br>
+    </form>
+
+    <a href="/posts" class="btn btn-outline-info float-right">취소</a>
+    <a id="btn-save" class="btn btn-outline-info float-right">등록</a>
+
+  </div>
+
+
+</th:block>
+</html>
