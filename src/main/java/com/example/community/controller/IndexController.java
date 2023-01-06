@@ -17,7 +17,7 @@ public class IndexController {
 	private final PostsService postsService;
 
 	@GetMapping("/")
-	public String index(Model model) {
+	public String home(Model model) {
 		return "index";
 	}
 
@@ -27,16 +27,16 @@ public class IndexController {
 		return "posts";
 	}
 
-	@GetMapping("/posts/{postId}")
-	public String specificPost(@PathVariable Long postId, Model model) {
-		PostsResponseDto dto = postsService.findById(postId);
+	@GetMapping("/posts/{id}")
+	public String specificPost(@PathVariable Long id, Model model) {
+		PostsResponseDto dto = postsService.findById(id);
 		model.addAttribute("post", dto);
 		return "post-specific";
 	}
 
-	@GetMapping("/posts/{postId}/edit")
-	public String postUpdate(@PathVariable Long postId, Model model) {
-		PostsResponseDto dto = postsService.findById(postId);
+	@GetMapping("/posts/{id}/edit")
+	public String postUpdate(@PathVariable Long id, Model model) {
+		PostsResponseDto dto = postsService.findById(id);
 		model.addAttribute("post", dto);
 		return "posts-update";
 	}
