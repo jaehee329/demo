@@ -26,10 +26,36 @@
             </div><br>
 
             <a href="/posts" class="btn btn-outline-info float-start">목록으로</a>
-            <a href="#" class="btn btn-outline-primary float-end">수정</a>
-            <a href="#" class="btn btn-outline-danger float-end">삭제</a>
+            <a th:href="|/posts/${post.id}/edit|" class="btn btn-outline-primary float-end">수정</a>
+            <a id="post-save" href="/posts" onclick="postDelete(); return false;"
+               class="btn btn-outline-danger float-end">삭제</a>
         </form>
     </div>
+
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        const formEl = document.getElementById("post");
+        function postDelete() {
+            const formData = new FormData(formEl);
+            const data = Object.fromEntries(formData);
+
+            fetch("/api/v1/posts/" + /*[[${post.id}]]*/, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            })
+                .then((response) => {
+                    if (!response.ok) {
+                        alert("글이 삭제되지 않았습니다.");
+                    } else {
+                        alert("글이 성공적으로 삭제되었습니다.");
+                    }
+                })
+        }
+        /*]]>*/
+    </script>
 
 </th:block>
 </html>
