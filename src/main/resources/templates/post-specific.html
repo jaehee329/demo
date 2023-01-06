@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+
+<th:block layout:fragment="content">
+
+    <br>
+    <h1>Posts Specific</h1>
+    <br>
+    <div class="container">
+
+        <form id="post">
+            <div class="form-group">
+                <label for="title">제목</label>
+                <input type="text" class="form-control" id="title" name="title" th:value="${post.title}" readonly>
+            </div><br>
+            <div class="form-group">
+                <label for="author">작성자</label>
+                <input type="text" class="form-control" id="author" name="author" th:value="${post.author}" readonly>
+            </div><br>
+            <div class="form-group">
+                <label for="content">내용</label>
+                <textarea type="text" class="form-control" rows="3"
+                          id="content" name="content" th:value="${post.content}" readonly></textarea>
+            </div><br>
+
+            <a href="/posts" class="btn btn-outline-info float-start">목록으로</a>
+            <a href="#" class="btn btn-outline-primary float-end">수정</a>
+            <a href="#" class="btn btn-outline-danger float-end">삭제</a>
+        </form>
+    </div>
+
+</th:block>
+</html>
