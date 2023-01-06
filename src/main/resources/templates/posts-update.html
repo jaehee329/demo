@@ -21,8 +21,7 @@
             </div><br>
             <div class="form-group">
                 <label for="content">내용</label>
-                <textarea type="text" class="form-control" rows="3"
-                          id="content" name="content" th:value="${post.content}"></textarea>
+                <input type="text" class="form-control" id="content" name="content" th:value="${post.content}">
             </div><br>
 
             <a href="/posts" class="btn btn-outline-danger float-right">취소</a>
