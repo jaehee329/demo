@@ -6,27 +6,27 @@
 <th:block layout:fragment="content">
 
     <br>
-    <h1>Posts Save</h1>
+    <h1>Posts Update</h1>
     <br>
     <div class="container">
 
         <form id="post">
             <div class="form-group">
                 <label for="title">제목</label>
-                <input type="text" class="form-control" id="title" name="title" placeholder="제목을 입력하세요">
+                <input type="text" class="form-control" id="title" name="title" th:value="${post.title}">
             </div><br>
             <div class="form-group">
                 <label for="author">작성자</label>
-                <input type="text" class="form-control" id="author" name="author" placeholder="작성자를 입력하세요">
+                <input type="text" class="form-control" id="author" name="author" th:value="${post.author}" readonly>
             </div><br>
             <div class="form-group">
                 <label for="content">내용</label>
                 <textarea type="text" class="form-control" rows="3"
-                          id="content" name="content" placeholder="내용을 입력하세요"></textarea>
+                          id="content" name="content" th:value="${post.content}"></textarea>
             </div><br>
 
-            <a href="/posts" class="btn btn-outline-danger float-end">취소</a>
-            <button type="submit" class="btn btn-primary float-end">저장</button>
+            <a href="/posts" class="btn btn-outline-danger float-right">취소</a>
+            <button type="submit" class="btn btn-primary float-right">저장</button>
         </form>
     </div>
 

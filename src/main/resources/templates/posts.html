@@ -20,11 +20,12 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>1</td>
-                    <th>title</th>
-                    <th>author</th>
-                    <th>modificationDate</th>
+                <tr th:each="post : ${posts}" style="cursor: pointer"
+                    th:post-id="${post.id}" onclick="rowClicked(this.getAttribute('post-id'))">
+                    <td th:text="${post.id}"></td>
+                    <td th:text="${post.title}"></td>
+                    <td th:text="${post.author}"></td>
+                    <td th:text="${post.modifiedDate}"></td>
                 </tr>
             </tbody>
         </table>
@@ -38,10 +39,15 @@
                 <li><a href="#" style="margin-right: 5px;" class="text-secondary"︎> ▶︎ </a></li>
             </ul>
         </div>
-        <a href="/posts/save" class="btn btn-outline-info float-right">글쓰기</a>
+        <a href="/posts/save" class="btn btn-outline-info float-end">글쓰기</a>
 
     </div>
 
+    <script>
+        function rowClicked(postId) {
+            location.href = "/posts/" + postId;
+        }
+    </script>
 
 </th:block>
 </html>
