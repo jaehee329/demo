@@ -11,16 +11,20 @@
         <h1>Basic Layout with Bootstrap</h1>
         <br>
 
-        <button type="button" class="btn btn-outline-info">TestButton</button>
-
-        <h3>Left Sidebar with Submenus</h3>
-        <p class="lead">
-            An example 2-level sidebar with collasible menu items. The menu functions like an "accordion" where only a single
-            menu is be open at a time. While the sidebar itself is not toggle-able, it does responsively shrink in width on smaller screens.</p>
-        <ul class="list-unstyled">
-            <li><h5>Responsive</h5> shrinks in width, hides text labels and collapses to icons only on mobile</li>
-        </ul>
-
+<!--        로그인 기능 영역-->
+        <div class="row">
+            <div class="col-md-6">
+                <div th:if="${userName == null}">
+                    <a href="/oauth2/authorization/google" class="btn btn-success active" role="button">
+                        Google Login
+                    </a>
+                </div>
+                <div th:if="${userName != null}">
+                    Logged in as: [[${userName}]]
+                    <a href="/logout" class="btn btn-info active" role="button">Logout</a>
+                </div>
+            </div>
+        </div>
     </div>
 </th:block>
 </html>
