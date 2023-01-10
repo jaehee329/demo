@@ -1,7 +1,6 @@
 package com.example.community.config.auth;
 
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
@@ -11,7 +10,6 @@ import com.example.community.domain.user.Role;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-@Configuration
 @EnableWebSecurity
 public class SecurityConfiguration {
 
@@ -21,16 +19,17 @@ public class SecurityConfiguration {
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
 		http
-			.csrf(csrf -> csrf.disable())
-			.authorizeHttpRequests(auth -> auth
-				.requestMatchers("/", "/css/**", "/images/**", "/js/**", "/h2-console/**").permitAll()
-				.requestMatchers("/api/v1**").hasRole(Role.USER.name())
-				.anyRequest().authenticated())
-			.logout().logoutSuccessUrl("/");
+			.csrf().disable()
+			.headers().frameOptions().disable()
+			.and()
+				.authorizeHttpRequests(auth -> auth
+					.requestMatchers("/", "/css/**", "/images/**", "/js/**", "/h2-console/**").permitAll()
+					.requestMatchers("/api/v1**").hasRole(Role.USER.name())
+					.anyRequest().authenticated())
+			.logout().logoutSuccessUrl("/")
+			.and()
+				.oauth2Login().userInfoEndpoint().userService(customOAuth2UserService);
 
-		http
-			.oauth2Login(oauth2 -> oauth2
-				.userInfoEndpoint().userService(customOAuth2UserService));
 		return http.build();
 	}
 }
