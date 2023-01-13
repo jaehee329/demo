@@ -1,10 +1,15 @@
 package com.example.community.controller;
 
+import java.security.Principal;
+
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import com.example.community.config.auth.CustomOAuth2UserService;
+import com.example.community.config.auth.dto.OAuthAttributes;
 import com.example.community.config.auth.dto.SessionUser;
 import com.example.community.controller.dto.PostsResponseDto;
 import com.example.community.service.PostsService;

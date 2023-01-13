@@ -42,3 +42,5 @@ public class PostsApiController {
 		return id;
 	}
 }
+
+// TODO: POST 이후 PRG 패턴을 어떻게 적용할지? API인데 post 처리 이후 redirect 시켜도 되는지 모르겠음.
