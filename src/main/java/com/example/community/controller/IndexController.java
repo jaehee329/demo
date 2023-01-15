@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import com.example.community.config.auth.CustomOAuth2UserService;
+import com.example.community.config.auth.LoginUser;
 import com.example.community.config.auth.dto.OAuthAttributes;
 import com.example.community.config.auth.dto.SessionUser;
 import com.example.community.controller.dto.PostsResponseDto;
@@ -25,8 +26,8 @@ public class IndexController {
 	private final HttpSession httpSession;
 
 	@GetMapping("/")
-	public String home(Model model) {
-		SessionUser user = (SessionUser)httpSession.getAttribute("user");
+	public String home(Model model, @LoginUser SessionUser user) {
+		// SessionUser user = (SessionUser)httpSession.getAttribute("user");
 		if (user != null) {
 			model.addAttribute("userName", user.getName());
 		}

@@ -29,15 +29,12 @@ public class SecurityConfiguration {
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
 		http
-			// .csrf().ignoringRequestMatchers("/h2-console/**")
-			// .and()
 			.csrf().disable()
 			.headers().addHeaderWriter(new XFrameOptionsHeaderWriter(XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN))
 			.and()
 				.authorizeHttpRequests(auth -> auth
 					.requestMatchers( "/", "/favicon.ico", "/posts/**", "/css/**", "/images/**", "/js/**", "/h2-console/**", "/error/**", "/register").permitAll()
-					// .requestMatchers( "/h2-console/**", "/error/**").permitAll()
-					// .requestMatchers("/", "/h2-console/**", "/posts/**", "/error/**", "/favicon.ico").permitAll()
+					.requestMatchers("/api/v1/**").hasRole(Role.USER.name())
 					.anyRequest().authenticated())
 				.logout().logoutSuccessUrl("/")
 			.and()
