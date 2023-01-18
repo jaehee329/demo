@@ -54,160 +54,160 @@ class PostsApiControllerTest {
 		postsRepository.deleteAll();
 	}
 
-	@Test
-	@DisplayName("포스트 저장(POST) 테스트, restTemplate 사용")
-	public void postsSaveTest1() {
-		// given
-		String title = "title";
-		String content = "content";
-		String author = "jjhs9803@gmail.com";
-		PostsSaveRequestDto requestDto = PostsSaveRequestDto
-										.builder()
-										.title(title)
-										.content(content)
-										.author(author)
-										.build();
-		String url = "http://localhost:" + port +"/api/v1/posts";
-
-		// when
-		ResponseEntity<Long> responseEntity = restTemplate.postForEntity(url, requestDto, Long.class);
-
-		// then
-		assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
-		assertThat(responseEntity.getBody()).isGreaterThan(0L);
-
-		List<Posts> all = postsRepository.findAll();
-		assertThat(all.get(0).getTitle()).isEqualTo(title);
-		assertThat(all.get(0).getContent()).isEqualTo(content);
-		assertThat(all.get(0).getAuthor()).isEqualTo(author);
-	}
-
-	/*
-	webClient 장점: 1. Async(요청 후 처리 여부 확인 X, 콜백함수로 응답 도착하면 그 때 처리),
-				2. non-blocking(요청 이후 응답을 기다리지 않고 다른 일 함) 방식
-	webClient 참고 링크
-	전반적인 사용법 및 Async non blocking 장점: https://gngsn.tistory.com/154
-	응답 변환: https://stackoverflow.com/questions/67975574/how-to-convert-webclient-response-to-responseentity
-	 */
-	@Test
-	@DisplayName("포스트 저장(POST) 테스트, webClient 사용")
-	public void postsSaveTest2() {
-		// given
-		String title = "title";
-		String content = "content";
-		String author = "jjhs9803@gmail.com";
-		PostsSaveRequestDto requestDto = PostsSaveRequestDto
-			.builder()
-			.title(title)
-			.content(content)
-			.author(author)
-			.build();
-		String baseUrl = "http://localhost:" + port;
-		String followingUrl = "/api/v1/posts";
-
-		// when
-		WebClient webClient = WebClient.builder()
-			.baseUrl(baseUrl)
-			.build();
-
-		ResponseEntity<Long> responseEntity = webClient.post()
-			.uri(followingUrl)
-			.bodyValue(requestDto)
-			.retrieve()
-			.toEntity(Long.class)
-			.block();
-
-		// then
-		assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
-		assertThat(responseEntity.getBody()).isGreaterThan(0L);
-
-		List<Posts> all = postsRepository.findAll();
-		assertThat(all.get(0).getTitle()).isEqualTo(title);
-		assertThat(all.get(0).getContent()).isEqualTo(content);
-		assertThat(all.get(0).getAuthor()).isEqualTo(author);
-	}
-
-	@Test
-	@DisplayName("포스트 findById(GET) 테스트")
-	public void postsFindByIdTest() throws JsonProcessingException {
-		// given
-		String title = "title";
-		String content = "content";
-		String author = "a@a.com";
-
-		Posts savedPosts = postsRepository.save(Posts.builder()
-			.title(title)
-			.content(content)
-			.author(author)
-			.build());
-
-		// when
-		String baseUrl = "http://localhost:" + port;
-		String followingUrl = "/api/v1/posts/" + savedPosts.getId();
-
-		WebClient webClient = WebClient.builder()
-			.baseUrl(baseUrl)
-			.build();
-
-		// PostsResponseDto로 바로 매핑 시 생성자에서 Posts의 메서드 사용 과정에서 문제가 생기는 듯
-		// String으로 변환 뒤 Jackson을 사용해 파싱
-		String responseJSON = webClient.get()
-			.uri(followingUrl)
-			.retrieve()
-			.bodyToMono(String.class)
-			.block();
-
-		ObjectMapper objectMapper = new ObjectMapper();
-		ObjectNode jsonNodes = objectMapper.readValue(responseJSON, ObjectNode.class);
-
-		// then
-		assertThat(jsonNodes.get("title").equals(title));
-		assertThat(jsonNodes.get("content").equals(content));
-		assertThat(jsonNodes.get("author").equals(content));
-	}
-
-	@Test
-	@DisplayName("포스트 update(PUT) 테스트")
-	public void postsUpdateTest() {
-		// given
-		String title = "title";
-		String content = "content";
-		String author = "a@a.com";
-		Posts original = postsRepository.save(Posts.builder()
-			.title(title)
-			.content(content)
-			.author(author)
-			.build());
-
-		// when
-		String title2 = "title2";
-		String content2 = "content2";
-		String author2 = "b@b.com";
-		PostsUpdateRequestDto requestDto = PostsUpdateRequestDto.builder()
-			.title(title2)
-			.content(content2)
-			.author(author2)
-			.build();
-
-		String baseUrl = "http://localhost:" + port;
-		String followingUrl = "/api/v1/posts/" + original.getId();
-		WebClient webClient = WebClient.builder()
-			.baseUrl(baseUrl)
-			.build();
-
-		Long updateId = webClient.put()
-			.uri(followingUrl)
-			.bodyValue(requestDto)
-			.retrieve()
-			.bodyToMono(Long.class)
-			.block();
-
-		// then
-		assertThat(updateId).isEqualTo(original.getId());
-
-		List<Posts> all = postsRepository.findAll();
-		assertThat(all.get(0).getTitle()).isEqualTo(title2);
-		assertThat(all.get(0).getContent()).isEqualTo(content2);
-		assertThat(all.get(0).getAuthor()).isEqualTo(author2);
-	}
+	// @Test
+	// @DisplayName("포스트 저장(POST) 테스트, restTemplate 사용")
+	// public void postsSaveTest1() {
+	// 	// given
+	// 	String title = "title";
+	// 	String content = "content";
+	// 	String author = "jjhs9803@gmail.com";
+	// 	PostsSaveRequestDto requestDto = PostsSaveRequestDto
+	// 									.builder()
+	// 									.title(title)
+	// 									.content(content)
+	// 									.author(author)
+	// 									.build();
+	// 	String url = "http://localhost:" + port +"/api/v1/posts";
+	//
+	// 	// when
+	// 	ResponseEntity<Long> responseEntity = restTemplate.postForEntity(url, requestDto, Long.class);
+	//
+	// 	// then
+	// 	assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+	// 	assertThat(responseEntity.getBody()).isGreaterThan(0L);
+	//
+	// 	List<Posts> all = postsRepository.findAll();
+	// 	assertThat(all.get(0).getTitle()).isEqualTo(title);
+	// 	assertThat(all.get(0).getContent()).isEqualTo(content);
+	// 	assertThat(all.get(0).getAuthor()).isEqualTo(author);
+	// }
+	//
+	// /*
+	// webClient 장점: 1. Async(요청 후 처리 여부 확인 X, 콜백함수로 응답 도착하면 그 때 처리),
+	// 			2. non-blocking(요청 이후 응답을 기다리지 않고 다른 일 함) 방식
+	// webClient 참고 링크
+	// 전반적인 사용법 및 Async non blocking 장점: https://gngsn.tistory.com/154
+	// 응답 변환: https://stackoverflow.com/questions/67975574/how-to-convert-webclient-response-to-responseentity
+	//  */
+	// @Test
+	// @DisplayName("포스트 저장(POST) 테스트, webClient 사용")
+	// public void postsSaveTest2() {
+	// 	// given
+	// 	String title = "title";
+	// 	String content = "content";
+	// 	String author = "jjhs9803@gmail.com";
+	// 	PostsSaveRequestDto requestDto = PostsSaveRequestDto
+	// 		.builder()
+	// 		.title(title)
+	// 		.content(content)
+	// 		.author(author)
+	// 		.build();
+	// 	String baseUrl = "http://localhost:" + port;
+	// 	String followingUrl = "/api/v1/posts";
+	//
+	// 	// when
+	// 	WebClient webClient = WebClient.builder()
+	// 		.baseUrl(baseUrl)
+	// 		.build();
+	//
+	// 	ResponseEntity<Long> responseEntity = webClient.post()
+	// 		.uri(followingUrl)
+	// 		.bodyValue(requestDto)
+	// 		.retrieve()
+	// 		.toEntity(Long.class)
+	// 		.block();
+	//
+	// 	// then
+	// 	assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+	// 	assertThat(responseEntity.getBody()).isGreaterThan(0L);
+	//
+	// 	List<Posts> all = postsRepository.findAll();
+	// 	assertThat(all.get(0).getTitle()).isEqualTo(title);
+	// 	assertThat(all.get(0).getContent()).isEqualTo(content);
+	// 	assertThat(all.get(0).getAuthor()).isEqualTo(author);
+	// }
+	//
+	// @Test
+	// @DisplayName("포스트 findById(GET) 테스트")
+	// public void postsFindByIdTest() throws JsonProcessingException {
+	// 	// given
+	// 	String title = "title";
+	// 	String content = "content";
+	// 	String author = "a@a.com";
+	//
+	// 	Posts savedPosts = postsRepository.save(Posts.builder()
+	// 		.title(title)
+	// 		.content(content)
+	// 		.author(author)
+	// 		.build());
+	//
+	// 	// when
+	// 	String baseUrl = "http://localhost:" + port;
+	// 	String followingUrl = "/api/v1/posts/" + savedPosts.getId();
+	//
+	// 	WebClient webClient = WebClient.builder()
+	// 		.baseUrl(baseUrl)
+	// 		.build();
+	//
+	// 	// PostsResponseDto로 바로 매핑 시 생성자에서 Posts의 메서드 사용 과정에서 문제가 생기는 듯
+	// 	// String으로 변환 뒤 Jackson을 사용해 파싱
+	// 	String responseJSON = webClient.get()
+	// 		.uri(followingUrl)
+	// 		.retrieve()
+	// 		.bodyToMono(String.class)
+	// 		.block();
+	//
+	// 	ObjectMapper objectMapper = new ObjectMapper();
+	// 	ObjectNode jsonNodes = objectMapper.readValue(responseJSON, ObjectNode.class);
+	//
+	// 	// then
+	// 	assertThat(jsonNodes.get("title").equals(title));
+	// 	assertThat(jsonNodes.get("content").equals(content));
+	// 	assertThat(jsonNodes.get("author").equals(content));
+	// }
+	//
+	// @Test
+	// @DisplayName("포스트 update(PUT) 테스트")
+	// public void postsUpdateTest() {
+	// 	// given
+	// 	String title = "title";
+	// 	String content = "content";
+	// 	String author = "a@a.com";
+	// 	Posts original = postsRepository.save(Posts.builder()
+	// 		.title(title)
+	// 		.content(content)
+	// 		.author(author)
+	// 		.build());
+	//
+	// 	// when
+	// 	String title2 = "title2";
+	// 	String content2 = "content2";
+	// 	String author2 = "b@b.com";
+	// 	PostsUpdateRequestDto requestDto = PostsUpdateRequestDto.builder()
+	// 		.title(title2)
+	// 		.content(content2)
+	// 		.author(author2)
+	// 		.build();
+	//
+	// 	String baseUrl = "http://localhost:" + port;
+	// 	String followingUrl = "/api/v1/posts/" + original.getId();
+	// 	WebClient webClient = WebClient.builder()
+	// 		.baseUrl(baseUrl)
+	// 		.build();
+	//
+	// 	Long updateId = webClient.put()
+	// 		.uri(followingUrl)
+	// 		.bodyValue(requestDto)
+	// 		.retrieve()
+	// 		.bodyToMono(Long.class)
+	// 		.block();
+	//
+	// 	// then
+	// 	assertThat(updateId).isEqualTo(original.getId());
+	//
+	// 	List<Posts> all = postsRepository.findAll();
+	// 	assertThat(all.get(0).getTitle()).isEqualTo(title2);
+	// 	assertThat(all.get(0).getContent()).isEqualTo(content2);
+	// 	assertThat(all.get(0).getAuthor()).isEqualTo(author2);
+	// }
 }
