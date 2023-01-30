@@ -2,18 +2,18 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
 <!-- 공통 헤더-->
-<th:block th:replace="~{/layout/fragments/header :: headerFragment}"></th:block>
+<th:block th:replace="~{layout/fragments/header :: headerFragment}"></th:block>
 
 <body>
 <div class="container-fluid">
     <div class="row flex-nowrap">
 
     <!-- 사이드바-->
-    <th:block th:replace="~{/layout/fragments/sidebar :: sidebarFragment}"></th:block>
+    <th:block th:replace="~{layout/fragments/sidebar :: sidebarFragment}"></th:block>
 
         <div id="content" class="col py-3">
             <!-- 상단바-->
-            <th:block th:replace="~{/layout/fragments/topbar :: topbarFragment}"></th:block>
+            <th:block th:replace="~{layout/fragments/topbar :: topbarFragment}"></th:block>
             <!-- 본문-->
             <th:block layout:fragment="content"></th:block>
         </div>
@@ -21,8 +21,8 @@
     </div>
 </div>
 <!-- 공통 하단-->
-    <th:block th:replace="~{/layout/fragments/footer :: footerFragment}"></th:block>
+    <th:block th:replace="~{layout/fragments/footer :: footerFragment}"></th:block>
 <!-- 공통 스크립트-->
-    <th:block th:replace="~{/layout/fragments/script :: scriptFragment}"></th:block>
+    <th:block th:replace="~{layout/fragments/script :: scriptFragment}"></th:block>
 </body>
 </html>

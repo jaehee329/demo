@@ -31,7 +31,7 @@ dependencies {
 
     implementation 'org.springframework.boot:spring-boot-starter-validation'
 
-    compileOnly 'org.springframework.boot:spring-boot-starter-oauth2-client'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
     // 세션 정보가 내장 톰캣에 저장되어 앱 재시작 시 초기화. AWS의 RDS를 사용하기 위해 설정을 변경
     // Redis를 사용하는 편이 DB IO측면에서 유리하나 AWS의 elastic cache가 유료여서 RDS를 사용.
     compileOnly 'org.springframework.session:spring-session-jdbc'
