@@ -38,6 +38,9 @@ dependencies {
 
     // 테스트 환경에서 임의로 인증된 사용자를 추가해 API 테스트가 가능하도록
     testCompileOnly 'org.springframework.security:spring-security-test'
+
+    // AWS RDS인 MariaDB를 사용 가능하도록
+    compileOnly 'org.mariadb.jdbc:mariadb-java-client'
 }
 
 tasks.named('test') {
